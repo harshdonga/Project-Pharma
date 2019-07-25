@@ -114,10 +114,13 @@ class MedicineHandler(TransactionHandler):
             if medicine is None:
                 raise InvalidTransaction('Invalid action: Medicine DOES NOT exists: {}'.format(med_payload.medicineName))
 
-            medicine.stock = med_payload.stock
-            med_state.set_medicine(med_payload.medicineName , medicine)
+            if medicine.medicineID == med_payload.medicineID:
+                medicine.stock = med_payload.stock
+                med_state.set_medicine(med_payload.medicineName , medicine)
 
-            _display('Medicine Info updated successfully by: {}'.format(signer[:6]))
+                _display('Medicine Info updated successfully by: {}'.format(signer[:6]))
+            else:
+                raise InvalidTransaction('Unhandled action: {}'.format(med_payload.action))
 
         else:
             raise InvalidTransaction('Unhandled action: {}'.format(med_payload.action))

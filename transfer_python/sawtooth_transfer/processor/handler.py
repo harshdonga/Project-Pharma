@@ -95,7 +95,7 @@ class TransferHandler(TransactionHandler):
             if transfer_state.get_shipment(transfer_payload.shipmentID) is not None:
                 raise InvalidTransaction('Invalid action: Shipment already exists')
             
-
+            
             shipment = Shipment(
                     shipmentID = transfer_payload.shipmentID,
                     logisticsID = transfer_payload.logisticsID,
@@ -115,6 +115,11 @@ class TransferHandler(TransactionHandler):
 
             if shipment is None:
                 raise InvalidTransaction('Invalid action : Shipment does not exists: {}'.format(transfer_payload.shipmentID))
+
+            if(transfer_payload.shipmentStatus == 'DELIVERED'):
+                transfer_state.delete_shipment(transfer_payload.shipmentID)
+                _display('Shipment Deleted successfully deleted successfully by: {}'.format(signer[:6]))
+
 
             shipment.shipmentStatus = transfer_payload.shipmentStatus
             transfer_state.set_shipment(transfer_payload.shipmentID , shipment)

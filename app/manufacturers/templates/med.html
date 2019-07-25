@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <form action="medtransact" method="POST">
+            <label for="func">Choose task to perform:
+                <select name="func">
+                    <option value="createMedicine">createMedicine</option>
+                    <option value="updateMedicine">updateMedicine</option>
+                    <option value="updateMedicineOwner">updateMedicineOwner</option>
+                    <option value="deleteMedicine">deleteMedicine</option>
+                    <option value="list">list</option>
+                    <option value="show">show</option>
+                </select>
+            </label><br>
+            
+            <label for="medicineName">Medicine Name:
+                <input type="text" name="medicineName">
+            </label><br>
+
+            <label for="medicineID">Medicine ID:
+                <input type="text" name="medicineID">
+            </label><br>
+
+            <label for="medicineKeyContent">Medicine Key Content:
+                <input type="text" name="medicineKeyContent">
+            </label><br>
+
+            <label for="medicineAllContents">Medicine All Contents:
+                <input type="text" name="medicineAllContents">
+            </label><br>
+
+            <label for="expiryMonths">Expiry Months:
+                <input type="text" name="expiryMonths">
+            </label><br>
+
+            <input type="submit">
+        </form>
+    </body>
+</html>

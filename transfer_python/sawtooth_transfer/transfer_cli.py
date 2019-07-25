@@ -698,7 +698,11 @@ def do_list(args):
     ]
 
     if asset_list is not None:
-        print(asset_list)
+        print('-'*50)
+        for x in asset_list:
+            print(x)
+            print('x'*10)            
+        print('-'*50)
 
     else:
         raise TransferException("Could not retireve List")
@@ -715,9 +719,13 @@ def do_show(args):
     data = client.show(ID, auth_user=auth_user, auth_password=auth_password)
 
     if data is not None:
-        print(data)
+        print('-'*50)
+        for x in data:
+            print(x)
+            print('x'*10)            
+        print('-'*50)
     else:
-        raise TransferException("Asset not found: {}".format(shipmentID))
+        raise TransferException("Assets not found!")
 
 
 def main(prog_name = os.path.basename(sys.argv[0]), args = None):

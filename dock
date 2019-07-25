@@ -8,6 +8,10 @@ docker volume rm project_keyshare
 
 docker volume rm project_blocks
 
-docker build -f transfer_python/Dockerfile -t harsh/transfer:v1 .
+docker volume rm project_node
+
+# docker build -f transfer_python/Dockerfile -t harsh/transfer:v1 .
+
+docker build -f djangodocker -t harsh/djangoapp:v1 .
 
 echo "Done Shit!"

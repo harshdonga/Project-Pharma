@@ -8,6 +8,7 @@ services:
     volumes:
       - keyshare:/root
       - blocks:/var/lib/sawtooth
+      - node:/project
     depends_on:
       - validator
     command: |
@@ -22,6 +23,7 @@ services:
     volumes:
       - keyshare:/root
       - blocks:/var/lib/sawtooth
+      - node:/project
     depends_on:
       - validator
     command: |
@@ -36,6 +38,7 @@ services:
     volumes:
       - keyshare:/root
       - blocks:/var/lib/sawtooth
+      - node:/project
     depends_on:
       - validator
     command: |
@@ -51,6 +54,7 @@ services:
     volumes:
       - keyshare:/root
       - blocks:/var/lib/sawtooth
+      - node:/project
     depends_on:
       - validator
     command: |
@@ -66,6 +70,7 @@ services:
     container_name: sawtooth-validator
     volumes:
       - blocks:/var/lib/sawtooth
+      - node:/project
     expose:
       - 4004
       - 8800
@@ -100,6 +105,7 @@ services:
     volumes:
       - keyshare:/root
       - blocks:/var/lib/sawtooth
+      - node:/project
     ports:
       - "8008:8008"
     depends_on:
@@ -117,6 +123,7 @@ services:
     volumes:
       - keyshare:/root
       - blocks:/var/lib/sawtooth
+      - node:/project
     depends_on:
       - validator
     command: |
@@ -124,7 +131,26 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
       "
     stop_signal: SIGKILL
+  
+
+  # web:
+  #   image: harsh/nodeapp:v1
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - keyshare:/root
+  #     - blocks:/var/lib/sawtooth
+  
+  app:
+    image: harsh/djangoapp:v1
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python3 manage.py runserver 0.0.0.0:8000"
 
 volumes:
   keyshare:
   blocks:
+  node:
