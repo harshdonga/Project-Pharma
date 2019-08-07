@@ -2,144 +2,144 @@ version: '3.6'
 
 services:
 
-  settings-tp:
-    image: hyperledger/sawtooth-settings-tp:nightly
-    container_name: sawtooth-settings-tp
-    volumes:
-      - keyshare:/root
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    depends_on:
-      - validator
-    command: |
-      bash -c "
-        settings-tp -vv -C tcp://validator:4004
-      "
-    stop_signal: SIGKILL
-
-  med-tp-python:
-    image: harsh/med:v3
-    container_name: sawtooth-med-tp-python
-    volumes:
-      - keyshare:/root
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    depends_on:
-      - validator
-    command: |
-      bash -c "
-        med-tp-python -vv -C tcp://validator:4004
-      "
-    stop_signal: SIGKILL
-
-  transfer-tp-python:
-    image: harsh/transfer:v1
-    container_name: sawtooth-transfer-tp-python
-    volumes:
-      - keyshare:/root
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    depends_on:
-      - validator
-    command: |
-      bash -c "
-        transfer-tp-python -vv -C tcp://validator:4004
-      "
-    stop_signal: SIGKILL
-
-
-  client:
-    image: hyperledger/sawtooth-shell:nightly
-    container_name: sawtooth-shell
-    volumes:
-      - keyshare:/root
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    depends_on:
-      - validator
-    command: |
-      bash -c "
-        sawtooth keygen &&
-        tail -f /dev/null
-      "
-    stop_signal: SIGKILL
-
-
-  validator:
-    image: hyperledger/sawtooth-validator:nightly
-    container_name: sawtooth-validator
-    volumes:
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    expose:
-      - 4004
-      - 8800
-      - 5050
-    ports:
-      - "4004:4004"
-    # start the validator with an empty genesis batch
-    command: |
-      bash -c "
-        sawadm keygen
-        sawset genesis \
-          -k /etc/sawtooth/keys/validator.priv \
-          -o config-genesis.batch && \
-        sawset proposal create \
-          -k /etc/sawtooth/keys/validator.priv \
-          sawtooth.consensus.algorithm.name=Devmode \
-          sawtooth.consensus.algorithm.version=0.1 \
-          -o config.batch && \
-        sawadm genesis config-genesis.batch config.batch && \
-        sawtooth-validator -vv \
-            --endpoint tcp://validator:8800 \
-            --bind component:tcp://eth0:4004 \
-            --bind network:tcp://eth0:8800 \
-            --bind consensus:tcp://eth0:5050 \
-      "
-    stop_signal: SIGKILL
-
-
-  rest-api:
-    image: hyperledger/sawtooth-rest-api:nightly
-    container_name: sawtooth-rest-api
-    volumes:
-      - keyshare:/root
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    ports:
-      - "8008:8008"
-    depends_on:
-      - validator
-    command: |
-      bash -c "
-        sawtooth-rest-api -v --connect tcp://validator:4004 --bind rest-api:8008
-      "
-    stop_signal: SIGKILL
-
-
-  devmode-rust:
-    image: hyperledger/sawtooth-devmode-engine-rust:nightly
-    container_name: sawtooth-devmode-engine-rust
-    volumes:
-      - keyshare:/root
-      - blocks:/var/lib/sawtooth
-      - node:/project
-    depends_on:
-      - validator
-    command: |
-      bash -c "
-        devmode-engine-rust -v --connect tcp://validator:5050
-      "
-    stop_signal: SIGKILL
-  
-
-  # web:
-  #   image: harsh/nodeapp:v1
-  #   ports:
-  #     - "3000:3000"
+  # settings-tp:
+  #   image: hyperledger/sawtooth-settings-tp:nightly
+  #   container_name: sawtooth-settings-tp
   #   volumes:
   #     - keyshare:/root
   #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   depends_on:
+  #     - validator
+  #   command: |
+  #     bash -c "
+  #       settings-tp -vv -C tcp://validator:4004
+  #     "
+  #   stop_signal: SIGKILL
+
+  # med-tp-python:
+  #   image: harsh/med:v3
+  #   container_name: sawtooth-med-tp-python
+  #   volumes:
+  #     - keyshare:/root
+  #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   depends_on:
+  #     - validator
+  #   command: |
+  #     bash -c "
+  #       med-tp-python -vv -C tcp://validator:4004
+  #     "
+  #   stop_signal: SIGKILL
+
+  # transfer-tp-python:
+  #   image: harsh/transfer:v1
+  #   container_name: sawtooth-transfer-tp-python
+  #   volumes:
+  #     - keyshare:/root
+  #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   depends_on:
+  #     - validator
+  #   command: |
+  #     bash -c "
+  #       transfer-tp-python -vv -C tcp://validator:4004
+  #     "
+  #   stop_signal: SIGKILL
+
+
+  # client:
+  #   image: hyperledger/sawtooth-shell:nightly
+  #   container_name: sawtooth-shell
+  #   volumes:
+  #     - keyshare:/root
+  #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   depends_on:
+  #     - validator
+  #   command: |
+  #     bash -c "
+  #       sawtooth keygen &&
+  #       tail -f /dev/null
+  #     "
+  #   stop_signal: SIGKILL
+
+
+  # validator:
+  #   image: hyperledger/sawtooth-validator:nightly
+  #   container_name: sawtooth-validator
+  #   volumes:
+  #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   expose:
+  #     - 4004
+  #     - 8800
+  #     - 5050
+  #   ports:
+  #     - "4004:4004"
+  #   # start the validator with an empty genesis batch
+  #   command: |
+  #     bash -c "
+  #       sawadm keygen
+  #       sawset genesis \
+  #         -k /etc/sawtooth/keys/validator.priv \
+  #         -o config-genesis.batch && \
+  #       sawset proposal create \
+  #         -k /etc/sawtooth/keys/validator.priv \
+  #         sawtooth.consensus.algorithm.name=Devmode \
+  #         sawtooth.consensus.algorithm.version=0.1 \
+  #         -o config.batch && \
+  #       sawadm genesis config-genesis.batch config.batch && \
+  #       sawtooth-validator -vv \
+  #           --endpoint tcp://validator:8800 \
+  #           --bind component:tcp://eth0:4004 \
+  #           --bind network:tcp://eth0:8800 \
+  #           --bind consensus:tcp://eth0:5050 \
+  #     "
+  #   stop_signal: SIGKILL
+
+
+  # rest-api:
+  #   image: hyperledger/sawtooth-rest-api:nightly
+  #   container_name: sawtooth-rest-api
+  #   volumes:
+  #     - keyshare:/root
+  #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   ports:
+  #     - "8008:8008"
+  #   depends_on:
+  #     - validator
+  #   command: |
+  #     bash -c "
+  #       sawtooth-rest-api -v --connect tcp://validator:4004 --bind rest-api:8008
+  #     "
+  #   stop_signal: SIGKILL
+
+
+  # devmode-rust:
+  #   image: hyperledger/sawtooth-devmode-engine-rust:nightly
+  #   container_name: sawtooth-devmode-engine-rust
+  #   volumes:
+  #     - keyshare:/root
+  #     - blocks:/var/lib/sawtooth
+  #     - node:/project
+  #   depends_on:
+  #     - validator
+  #   command: |
+  #     bash -c "
+  #       devmode-engine-rust -v --connect tcp://validator:5050
+  #     "
+  #   stop_signal: SIGKILL
+
+  # dkr:
+  #   image: docker
+  #   privileged: true
+  #   working_dir: "/dkr"
+  #   volumes:
+  #     - ".:/dkr"
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #   command: docker ps -a  
   
   app:
     image: harsh/djangoapp:v1
