@@ -4,10 +4,12 @@ import getpass
 import datetime
 import pkg_resources
 import traceback
+import os
 import sys
 sys.path.insert(0, '/home/harsh/project/med_python')
 
-from med_python.sawtooth_med.med_client import MedClient
+# from sawtooth_med.med_client import MedClient
+# from sawtooth_med.med_exceptions import MedException
 
 
 DEFAULT_URL = 'http://127.0.0.1:8008'
@@ -40,7 +42,7 @@ def medtransact(request):
     wait = request.POST['wait']
     
     manufactureDate = datetime.date.today()
-    expiryDate = manufactureDate + datetime.timedelta((args.expirymonths)*365/12)
+    expiryDate = manufactureDate + datetime.timedelta(int(expiryMonths)*365/12)
 
     keyfile = _get_keyfile(uname)
     url = DEFAULT_URL

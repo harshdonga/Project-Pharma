@@ -77,7 +77,6 @@ services:
   #     - 5050
   #   ports:
   #     - "4004:4004"
-  #   # start the validator with an empty genesis batch
   #   command: |
   #     bash -c "
   #       sawadm keygen
@@ -147,8 +146,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-    command: >
-      sh -c "python3 manage.py runserver 0.0.0.0:8000"
+    command: python3 manage.py runserver 0.0.0.0:8000
 
 volumes:
   keyshare:

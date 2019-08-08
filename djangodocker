@@ -5,4 +5,7 @@ RUN pip install -r /requirements.txt
 
 RUN mkdir /app
 WORKDIR /app
+
+EXPOSE 8000
+
 COPY ./app /app
